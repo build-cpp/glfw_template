@@ -3,7 +3,7 @@ version = "3.15"
 cmkr-include = "cmake/cmkr.cmake"
 
 [project]
-name = "vcpkg_template"
+name = "glfw_template"
 
 # See https://github.com/microsoft/vcpkg#getting-started on how to use vcpkg
 # Chose a version from https://github.com/microsoft/vcpkg/releases
@@ -21,3 +21,4 @@ GLEW = {}
 type = "executable"
 sources = ["src/example.cpp"]
 link-libraries = ["glfw", "GLEW::GLEW"]
+compile-features = ["cxx_std_11"]
