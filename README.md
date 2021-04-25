@@ -28,6 +28,9 @@ cmkr-include = "cmake/cmkr.cmake"
 
 [project]
 name = "glfw_template"
+include-after = [
+    "cmake/generate_shaders.cmake"
+]
 
 # See https://github.com/microsoft/vcpkg#getting-started on how to use vcpkg
 # Chose a version from https://github.com/microsoft/vcpkg/releases
@@ -43,6 +46,17 @@ GLEW = {}
 
 [target.example]
 type = "executable"
-sources = ["src/example.cpp"]
+sources = [
+    "src/example.cpp",
+    "shaders/FragmentShader.glsl",
+    "shaders/VertexShader.glsl",
+]
+include-directories = [
+    "${CMAKE_CURRENT_BINARY_DIR}/include"
+]
 link-libraries = ["glfw", "GLEW::GLEW"]
+compile-features = ["cxx_std_11"]
+cmake-after = """
+generate_shaders(example)
+"""
 ```

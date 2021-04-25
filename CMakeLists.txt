@@ -24,7 +24,7 @@ endif()
 
 project(glfw_template)
 
-include("cmake/target_shader_sources.cmake")
+include("cmake/generate_shaders.cmake")
 
 include(FetchContent)
 
@@ -57,6 +57,8 @@ find_package(GLEW REQUIRED CONFIG)
 # Target example
 set(example_SOURCES
 	"src/example.cpp"
+	"shaders/FragmentShader.glsl"
+	"shaders/VertexShader.glsl"
 	cmake.toml
 )
 
@@ -73,14 +75,15 @@ target_compile_features(example PRIVATE
 	cxx_std_11
 )
 
+target_include_directories(example PRIVATE
+	"${CMAKE_CURRENT_BINARY_DIR}/include"
+)
+
 target_link_libraries(example PRIVATE
 	glfw
 	GLEW::GLEW
 )
 
-target_shader_sources(example PRIVATE
-    shaders/FragmentShader.glsl
-    shaders/VertexShader.glsl
-)
+generate_shaders(example)
 
 
