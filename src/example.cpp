@@ -1,4 +1,6 @@
 // Based on: https://gist.github.com/iondune/bf24795910abdcfa3360
+// Learn OpenGL book: https://learnopengl.com/
+// GLFW tutorial: https://www.glfw.org/docs/latest/quick_guide.html
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

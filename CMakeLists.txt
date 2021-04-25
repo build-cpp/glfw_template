@@ -67,6 +67,10 @@ endif()
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${example_SOURCES})
 
+target_compile_features(example PRIVATE
+	cxx_std_11
+)
+
 target_link_libraries(example PRIVATE
 	glfw
 	GLEW::GLEW

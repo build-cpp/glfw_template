@@ -1,18 +1,21 @@
 # glfw_template
 
-This is a template showcasing [cmkr](https://github.com/MoAlyousef/cmkr) together with [vcpkg](https://github.com/microsoft/vcpkg) for frictionless cross platform dependency management with CMake.
+Simple template to get started with OpenGL using [GLFW](https://www.glfw.org/docs/latest/quick_guide.html) and [GLEW](https://github.com/nigels-com/glew).
+
+This template uses [cmkr](https://github.com/MoAlyousef/cmkr) together with [vcpkg](https://github.com/microsoft/vcpkg) for frictionless cross platform dependency management with CMake.
 
 ## Building (IDE)
 
-Clone this repository and open it in your favorite IDE with CMake support (Visual Studio, CLion, Qt Creator). Everything should work out of the box.
+Clone this repository and open it in your favorite IDE with CMake support ([Visual Studio](https://visualstudio.microsoft.com/), [CLion](https://www.jetbrains.com/clion/), [Qt Creator](https://www.qt.io/product/development-tools)). Everything should work out of the box.
 
 ## Building (command line)
 
-```
-cmake -Bbuild
+```sh
+cmake -B build
+cmake --build build
 ```
 
-Then open the `.sln` (Windows) or run `make` (Unix) from the `build` directory.
+**Note:** On Ubuntu you need to run `sudo apt-get install libgl-dev libxinerama-dev libxcursor-dev xorg-dev libglu1-mesa-dev` to use this template.
 
 ## cmake.toml
 
@@ -24,7 +27,7 @@ version = "3.15"
 cmkr-include = "cmake/cmkr.cmake"
 
 [project]
-name = "vcpkg_template"
+name = "glfw_template"
 
 # See https://github.com/microsoft/vcpkg#getting-started on how to use vcpkg
 # Chose a version from https://github.com/microsoft/vcpkg/releases
