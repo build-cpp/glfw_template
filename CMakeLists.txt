@@ -24,6 +24,8 @@ endif()
 
 project(glfw_template)
 
+include("cmake/target_shader_sources.cmake")
+
 include(FetchContent)
 
 message(STATUS "Fetching pmm...")
@@ -75,4 +77,10 @@ target_link_libraries(example PRIVATE
 	glfw
 	GLEW::GLEW
 )
+
+target_shader_sources(example PRIVATE
+    shaders/FragmentShader.glsl
+    shaders/VertexShader.glsl
+)
+
 

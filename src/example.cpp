@@ -8,6 +8,10 @@
 #include <iostream>
 #include <string>
 
+// Include generated shaders
+#include <shaders/FragmentShader.h>
+#include <shaders/VertexShader.h>
+
 static void PrintOpenGLErrors(const char* Function, const char* File, int Line)
 {
 	bool Succeeded = true;
@@ -72,24 +76,6 @@ int main()
 		return -1;
 	}
 
-	const char* VertexShaderSource = R"GLSL(
-		#version 150
-		in vec2 position;
-		void main()
-		{
-			gl_Position = vec4(position, 0.0, 1.0);
-		}
-	)GLSL";
-
-	const char* FragmentShaderSource = R"GLSL(
-		#version 150
-		out vec4 outColor;
-		void main()
-		{
-			outColor = vec4(1.0, 1.0, 1.0, 1.0);
-		}
-	)GLSL";
-
 	const GLfloat Vertices[] = {
 		0.0f, 0.5f,
 		0.5f, -0.5f,
@@ -117,7 +103,7 @@ int main()
 
 	GLint Compiled;
 	GLuint VertexShader = CheckedGLResult(glCreateShader(GL_VERTEX_SHADER));
-	CheckedGLCall(glShaderSource(VertexShader, 1, &VertexShaderSource, NULL));
+	CheckedGLCall(glShaderSource(VertexShader, 1, &shaders::VertexShader, NULL));
 	CheckedGLCall(glCompileShader(VertexShader));
 	CheckedGLCall(glGetShaderiv(VertexShader, GL_COMPILE_STATUS, &Compiled));
 	if (!Compiled)
@@ -127,7 +113,7 @@ int main()
 	}
 
 	GLuint FragmentShader = CheckedGLResult(glCreateShader(GL_FRAGMENT_SHADER));
-	CheckedGLCall(glShaderSource(FragmentShader, 1, &FragmentShaderSource, NULL));
+	CheckedGLCall(glShaderSource(FragmentShader, 1, &shaders::FragmentShader, NULL));
 	CheckedGLCall(glCompileShader(FragmentShader));
 	CheckedGLCall(glGetShaderiv(FragmentShader, GL_COMPILE_STATUS, &Compiled));
 	if (!Compiled)
