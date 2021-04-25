@@ -1,12 +1,14 @@
 // Based on: https://gist.github.com/iondune/bf24795910abdcfa3360
 // Learn OpenGL book: https://learnopengl.com/
 // GLFW tutorial: https://www.glfw.org/docs/latest/quick_guide.html
+// C++ Graphics Tests and Examples: https://github.com/Toxe/cpp-graphics/blob/master/src/glfw/glfw_createwindow.cpp
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <cstdlib>
 #include <iostream>
-#include <string>
+#include <vector>
 
 // Include generated shaders
 #include <shaders/FragmentShader.h>
@@ -37,7 +39,7 @@ static void PrintOpenGLErrors(const char* Function, const char* File, int Line)
 #define CheckExistingErrors(x)
 #endif
 
-static void PrintShaderInfoLog(GLint const Shader)
+static void PrintShaderInfoLog(const GLint Shader)
 {
 	int InfoLogLength = 0;
 	int CharsWritten = 0;
@@ -46,43 +48,60 @@ static void PrintShaderInfoLog(GLint const Shader)
 
 	if (InfoLogLength > 0)
 	{
-		GLchar* InfoLog = new GLchar[InfoLogLength];
-		glGetShaderInfoLog(Shader, InfoLogLength, &CharsWritten, InfoLog);
-		std::cout << "Shader Info Log:" << std::endl << InfoLog << std::endl;
-		delete[] InfoLog;
+		std::vector<GLchar> InfoLog(InfoLogLength);
+		glGetShaderInfoLog(Shader, InfoLogLength, &CharsWritten, InfoLog.data());
+		std::cout << "Shader Info Log:" << std::endl << InfoLog.data() << std::endl;
 	}
+}
+
+static void error_callback(int error, const char* description)
+{
+	std::cerr << "GLFW Error: " << description << std::endl;
+}
+
+static void key_callback(GLFWwindow* window, const int key, const int, const int action, const int)
+{
+	if (action == GLFW_RELEASE && key == GLFW_KEY_ESCAPE)
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
 int main()
 {
-	GLFWwindow* window;
+	glfwSetErrorCallback(error_callback);
 
 	if (!glfwInit())
-		return -1;
+	{
+		return EXIT_FAILURE;
+	}
 
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
-		return -1;
+		return EXIT_FAILURE;
 	}
 	glfwMakeContextCurrent(window);
 
+	glfwSwapInterval(1);
+	glfwSetKeyCallback(window, key_callback);
+
 	GLenum err = glewInit();
-	if (GLEW_OK != err)
+	if (err != GLEW_OK)
 	{
-		std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
+		std::cerr << "GLEW Error: " << glewGetErrorString(err) << std::endl;
 		glfwTerminate();
-		return -1;
+		return EXIT_FAILURE;
 	}
 
-	const GLfloat Vertices[] = {
+	const GLfloat Vertices[] =
+	{
 		0.0f, 0.5f,
 		0.5f, -0.5f,
 		-0.5f, -0.5f
 	};
 
-	const GLuint Elements[] = {
+	const GLuint Elements[] =
+	{
 		0, 1, 2
 	};
 
@@ -110,6 +129,7 @@ int main()
 	{
 		std::cerr << "Failed to compile vertex shader!" << std::endl;
 		PrintShaderInfoLog(VertexShader);
+		return EXIT_FAILURE;
 	}
 
 	GLuint FragmentShader = CheckedGLResult(glCreateShader(GL_FRAGMENT_SHADER));
@@ -120,6 +140,7 @@ int main()
 	{
 		std::cerr << "Failed to compile fragment shader!" << std::endl;
 		PrintShaderInfoLog(FragmentShader);
+		return EXIT_FAILURE;
 	}
 
 	GLuint ShaderProgram = CheckedGLResult(glCreateProgram());
@@ -154,5 +175,5 @@ int main()
 	CheckedGLCall(glDeleteVertexArrays(1, &VAO));
 
 	glfwTerminate();
-	return 0;
+	return EXIT_SUCCESS;
 }
