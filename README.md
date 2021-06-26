@@ -2,7 +2,7 @@
 
 Simple template to get started with OpenGL using [GLFW](https://www.glfw.org/docs/latest/quick_guide.html) and [GLEW](https://github.com/nigels-com/glew).
 
-This template uses [cmkr](https://github.com/MoAlyousef/cmkr) together with [vcpkg](https://github.com/microsoft/vcpkg) for frictionless cross platform dependency management with CMake.
+This template uses [cmkr](https://github.com/build-cpp/cmkr) together with [vcpkg](https://github.com/microsoft/vcpkg) for frictionless cross platform dependency management with CMake.
 
 ## Building (IDE)
 
@@ -32,12 +32,11 @@ include-after = [
     "cmake/generate_shaders.cmake"
 ]
 
-# See https://github.com/microsoft/vcpkg#getting-started on how to use vcpkg
+# See https://vcpkg.io/en/packages.html for available packages
 # Chose a version from https://github.com/microsoft/vcpkg/releases
-# During CMake configuration you will be told how to find and link to the packages
 [vcpkg]
-version = "2020.11"
-packages = ["glfw3", "GLEW"]
+version = "2021.05.12"
+packages = ["glfw3", "glew"]
 
 # vcpkg will download the packages, but you still need to find them to use them
 [find-package]
@@ -51,12 +50,9 @@ sources = [
     "shaders/FragmentShader.glsl",
     "shaders/VertexShader.glsl",
 ]
-include-directories = [
-    "${CMAKE_CURRENT_BINARY_DIR}/include"
-]
 link-libraries = ["glfw", "GLEW::GLEW"]
 compile-features = ["cxx_std_11"]
 cmake-after = """
-generate_shaders(example)
+generate_shaders(${CMKR_TARGET})
 """
 ```
