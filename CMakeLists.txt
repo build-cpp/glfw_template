@@ -3,6 +3,10 @@
 
 cmake_minimum_required(VERSION 3.15)
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+	message(FATAL_ERROR "In-tree builds are not supported. Run CMake from a separate directory: cmake -B build")
+endif()
+
 # Regenerate CMakeLists.txt automatically in the root project
 set(CMKR_ROOT_PROJECT OFF)
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
@@ -29,16 +33,16 @@ include("cmake/generate_shaders.cmake")
 
 if(CMKR_ROOT_PROJECT AND NOT CMKR_DISABLE_VCPKG)
 	include(FetchContent)
-	message(STATUS "Fetching vcpkg...")
+	message(STATUS "Fetching vcpkg (2021.05.12)...")
 	FetchContent_Declare(vcpkg URL "https://github.com/microsoft/vcpkg/archive/refs/tags/2021.05.12.tar.gz")
 	FetchContent_MakeAvailable(vcpkg)
 	include("${vcpkg_SOURCE_DIR}/scripts/buildsystems/vcpkg.cmake")
 endif()
 
 # Packages
-find_package(glfw3 REQUIRED CONFIG)
+find_package(glfw3 REQUIRED)
 
-find_package(GLEW REQUIRED CONFIG)
+find_package(GLEW REQUIRED)
 
 # Target example
 set(CMKR_TARGET example)

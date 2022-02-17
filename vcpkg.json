@@ -6,6 +6,7 @@
     "glfw3",
     "glew"
   ],
+  "description": "",
   "name": "glfw-template",
   "version-string": ""
 }
